@@ -99,5 +99,25 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
+    public void test4(View view){
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    MultipartUtility mu = new MultipartUtility(
+                            "http://data.coa.gov.tw/Service/OpenData/ODwsv/ODwsvTravelFood.aspx",
+                            "", "UTF-8");
+                    List<String> ret = mu.finish();
+                    for (String line : ret){
+                        Log.v("brad", line);
+                    }
+
+                }catch(Exception e){
+                    Log.v("brad", e.toString());
+                }
+            }
+        }.start();
+    }
+
 
 }
