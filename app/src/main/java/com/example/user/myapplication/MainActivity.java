@@ -2,6 +2,7 @@ package com.example.user.myapplication;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -56,6 +59,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init(){
+        File sdroot = Environment.getExternalStorageDirectory();
+        File myfile = new File(sdroot, "ltu.txt");
+        try {
+            FileOutputStream fout = new FileOutputStream(myfile);
+            fout.write("Hello, LTU\r\nHello, World\r\n1234567".getBytes());
+            fout.flush();
+            fout.close();
+            Log.v("brad", "Save OK");
+        }catch(Exception ee){
+            Log.v("brad", ee.toString());
+        }
 
     }
 
@@ -131,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
-    public void test4(View view){
+    public void test40(View view){
         new Thread(){
             @Override
             public void run() {
@@ -144,6 +158,25 @@ public class MainActivity extends AppCompatActivity {
                         Log.v("brad", line);
                     }
 
+                }catch(Exception e){
+                    Log.v("brad", e.toString());
+                }
+            }
+        }.start();
+    }
+    public void test4(View view){
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    File sdroot = Environment.getExternalStorageDirectory();
+                    File myfile = new File(sdroot, "ltu.txt");
+
+                    MultipartUtility mu = new MultipartUtility("http://120.108.137.125/ltu/ltu05.php","","UTF-8");
+                    mu.addFilePart("upload", myfile);
+
+                    List<String> ret = mu.finish();
+                    Log.v("brad", ret.get(0));
                 }catch(Exception e){
                     Log.v("brad", e.toString());
                 }
