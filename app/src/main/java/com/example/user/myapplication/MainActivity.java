@@ -7,10 +7,12 @@ import android.view.View;
 import android.widget.EditText;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private EditText account, passwd, realname;
@@ -72,6 +74,26 @@ public class MainActivity extends AppCompatActivity {
 
                 } catch (Exception e) {
                     Log.v("brad", e.getLocalizedMessage());
+                }
+            }
+        }.start();
+    }
+
+    public void test3(View view){
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    MultipartUtility mu = new MultipartUtility("http://120.108.137.125/ltu/ltu03.php","", "UTF-8");
+                    mu.addFormField("account", account.getText().toString());
+                    mu.addFormField("passwd", passwd.getText().toString());
+                    mu.addFormField("realname", realname.getText().toString());
+                    List<String> ret = mu.finish();
+                    for (String line : ret){
+                        Log.v("brad", line);
+                    }
+                } catch (Exception e) {
+                    Log.v("brad", e.toString());
                 }
             }
         }.start();
